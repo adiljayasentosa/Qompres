@@ -65,6 +65,10 @@ body.dark{
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
+html, body{
+  max-width:100%;
+  overflow-x:hidden; /* safety net: no horizontal scroll regardless of any child overflow */
+}
 body{
   margin:0;
   font-family:'Inter', sans-serif;
@@ -244,6 +248,40 @@ body.dark .size-pill{background:#eaf3ee; color:#14211a;}
   .hero-inner{grid-template-columns:1fr;}
   .hero h1{font-size:36px;}
   .hero-visual{height:300px; margin-top:10px;}
+}
+
+/* Hero comparison illustration: below 768px the row layout (card —
+   link — squeeze icon — link — card) is wider than small viewports
+   can hold and was causing page-wide horizontal overflow. Stack it
+   vertically instead and shrink the cards so everything fits inside
+   320–430px viewports with no clipping. */
+@media (max-width:767px){
+  .hero-visual{
+    height:auto;
+    padding:12px 0 28px;
+  }
+  .squeeze-stage{
+    flex-direction:column;
+    flex-wrap:wrap;
+    gap:18px;
+  }
+  .img-card{ width:132px; height:132px; }
+  .img-card.after{ width:96px; height:96px; }
+  .squeeze-link{
+    width:2px; height:30px;
+    background-image:linear-gradient(to bottom, var(--green-500) 50%, transparent 50%);
+    background-size:2px 9px;
+  }
+  .squeeze-core{
+    margin:0; /* the negative horizontal margin was only meant to
+                 overlap the link in the horizontal layout */
+    width:46px; height:46px;
+  }
+  .squeeze-core svg{width:20px; height:20px;}
+  .size-pill{
+    font-size:11.5px; padding:5px 11px; bottom:-12px;
+    max-width:calc(100vw - 48px); /* never let a long pill label push past the viewport */
+  }
 }
 
 /* ---------------------------------------------------------------------
@@ -510,6 +548,16 @@ footer{border-top:1px solid var(--line); padding:48px 0 28px; background:var(--s
 .footer-top{display:flex; justify-content:space-between; flex-wrap:wrap; gap:30px; padding-bottom:32px;}
 .footer-brand .logo{margin-bottom:10px;}
 .footer-brand p{color:var(--text-soft); font-size:13.5px; max-width:280px; line-height:1.6;}
+.btn-saweria{
+  display:inline-flex; align-items:center; gap:8px; margin-top:16px;
+  padding:9px 16px; border-radius:99px; font-weight:600; font-size:13px;
+  background:#fff3e0; color:#b45309; border:1px solid #fcd9a8;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn-saweria svg{width:15px; height:15px;}
+.btn-saweria:hover{background:#ffe6bf; transform:translateY(-1px); box-shadow:var(--shadow-sm);}
+body.dark .btn-saweria{background:#2a2014; color:#fbbf6d; border-color:#4a3a1f;}
+body.dark .btn-saweria:hover{background:#352712;}
 .footer-cols{display:flex; gap:54px; flex-wrap:wrap;}
 .footer-col h5{font-size:13px; font-weight:700; margin-bottom:14px; color:var(--text);}
 .footer-col a{display:block; font-size:13.5px; color:var(--text-soft); margin-bottom:10px; transition:color .15s;}
